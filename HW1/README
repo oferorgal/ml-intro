@@ -1,0 +1,61 @@
+Ofer Orgal
+300459898
+oferorgal@mail.tau.ac.il
+
+The files are in my directory on nova.cs.tau.ac.il:
+/specific/a/home/cc/students/cs/oferorgal/ml/ex2/
+
+If for some reason the files are not accessible, I created a share in my google drive to my files:
+https://drive.google.com/drive/folders/0B6K9SrEqgeqRQUxSVkdSWHJRMkU?usp=sharing
+
+Folder content:
+Python files:
+	ex2q1.py - programing exercise 1
+	ex2q2.py - programing exercise 2
+
+Reports:
+	ex2.pdf - exercise report
+	README
+
+Plots:
+	plotQ1c.png 
+	plotQ1d.png
+	plotQ2a.png 
+	plotQ2c.png 
+	plotQ2d.png
+	plotQ2e.png 
+	plotQ2f.png   
+
+How to use the files:
+	Each section in the exercise is accessible by running the file name and the section letter (i.e. a , 	b , c …), more parameters may be needed according to the section requirements.  
+
+programing exercise 1
+sec. A:	python2.7 ex2q1.py a [img no. to query] [no. of neighbors]
+	output: prediction of the label of input image
+sec. B:	python2.7 ex2q1.py c // LOOK AT K VALUE AT K=10
+	output: Accuracy level of k=1,..,100 (Look at the value of k=10)
+sec. C:	python2.7 ex2q1.py c
+	output: returns the best k and plots the error rate on the test set for every k.
+			file: plotQ1c.png
+sec. D:	python2.7 ex2q1.py d [k value]
+	output: best size of training data for a given k and plot a	graph of accuracy with increasing training data size.
+			file: plotQ1d.png
+
+programing exercise 2
+sec. A:	python2.7 ex2q2.py a
+	output: a plot of interval and 100 (x,y) values
+			file: plotQ2a.png
+sec. B:	python2.7 ex2q2.py b
+	output: A list of intervals with their accuracy levels.
+sec. C:	python2.7 ex2q2.py c
+	output: plots a graph of the ERM error and the true error of the hypothesis.
+			file: plotQ2c.png
+sec. D:	python2.7 ex2q2.py d
+	output: plot showing the ERM error and True error (the true error is not surprising	constant because 		the sample data is the same across all runs)
+			file: plotQ2d.png
+sec. E:	python2.7 ex2q2.py e
+	output:	plots the average of 100 times for each k 
+			file: plotQ2e.png
+sec. F:	python2.7 ex2q2.py f
+	output: plots the error of the hypothesis intervals on the cross validation set.
+			file: plotQ2f.png
