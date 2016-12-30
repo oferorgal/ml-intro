@@ -14,6 +14,7 @@ import numpy.random
 from sklearn.datasets import fetch_mldata
 from astropy.table import Table, Column
 import sklearn.preprocessing
+from sklearn import svm
 
 mnist = fetch_mldata('MNIST original')
 data = mnist['data']
@@ -53,10 +54,67 @@ def main():
 	#print "The Accuracy of the Algorithm:" ,(accuracy(test_data_norm, test_labels, train(train_data_norm, train_labels))*100), "%"
 	
 	#1d
-	index, digit = find_misclassified()
-	print_image("misclassified_%d.png" %digit[0], test_data_unscaled[index[0]], 1)
-	print_image("misclassified_%d.png" %digit[1], test_data_unscaled[index[1]], 1)
+	#index, digit = find_misclassified()
+	#print_image("misclassified_%d.png" %digit[0], test_data_unscaled[index[0]], 1)
+	#print_image("misclassified_%d.png" %digit[1], test_data_unscaled[index[1]], 1)
+	
+	#2a
+	#best_C = SVM_find_best_C()
+
+	#2c
+	#best_C  = 1.00521990733
+	#SVM_weights(best_C)
+	
+	#2d
+	best_C  = 1.00521990733
+	clf = svm.LinearSVC(loss="hinge", fit_intercept=False, C=best_C)
+	clf.fit(train_data_norm, train_labels)
+	print "The accuracy of the linear SVM with C =", best_C, "is =", (clf.score(test_data_norm,test_labels)*100), "%"
 	return
+
+'''
+2c
+'''
+def SVM_weights(C):
+	clf = svm.LinearSVC(loss="hinge", fit_intercept=False, C=C)
+	clf.fit(train_data_norm, train_labels)
+	weights = clf.coef_[0] 
+	print weights
+	print_image("SVMWeights.png", weights, 200)
+	return
+
+'''
+2a
+'''
+def SVM_find_best_C():
+	cVec = []
+	meanVec = []
+	c = 10e-10
+	while c < 10e10:
+		clf = svm.LinearSVC(loss="hinge", fit_intercept=False, C=c)
+		clf.fit(train_data_norm, train_labels)
+		cVec.append(c)
+		mean = clf.score(validation_data_norm,validation_labels)
+		meanVec.append(mean)
+		print c, mean
+		if(c > 0.8	 and c < 1.1):
+			c *= 1.01
+		else:
+			c *= 1.5
+	res = zip(cVec, meanVec)
+	fig = plt.figure()
+	plt.plot(cVec, meanVec, c = "blue")
+	plt.xlabel('C Values')
+	plt.xscale("log")
+	plt.ylabel('Accuracy')         
+	plt.title('SVM accuracy with different C values') 
+	res.sort(key=operator.itemgetter(1))
+	plt.axvline(x=res[len(res)-1][0], c="red", label = "Best C=%f" %res[len(res)-1][0])
+	#plt.axhline(y=res[len(res)-1][1], c="red", label = "Best C=%f" %res[len(res)-1][1])
+	plt.legend(loc="lower right")
+	plt.savefig('plot2a')
+	print "Best C:", res[len(res)-1][0], "Mean:", res[len(res)-1][1]
+	return res[len(res)-1][0]
 
 '''
 1d
