@@ -44,32 +44,189 @@ test_data_norm = sklearn.preprocessing.normalize(test_data, norm='l2', axis=1, c
 
 def main():
 
+	if(len(sys.argv) < 2):
+		print "Input format:\n \
+        hw2.py 1a // Perceptron: calc the accuracy with 5, 10, 50, 100, 500, 1000, 5000 sample sizes\n \
+        hw2.py 1b // Perceptron: Print an image of the weights\n \
+        hw2.py 1c // Perceptron: Train perceptron on the full training set and test the accuracy on the test set\n \
+        hw2.py 1d // Perceptron: Find and print 2 misclassified images \n \
+        hw2.py 2a // SVM: Train SVM and find the best C value\n \
+        hw2.py 2c // SVM: Print an image of the weights\n \
+        hw2.py 2d // SVM: find the SVM accuracy for the test set\n \
+        hw2.py 3a // SGD: Train the SGD and find the best eta value for the CV\n \
+        hw2.py 3b // SGD: Train the SGD and find the best C value for the CV\n \
+        hw2.py 3c // SGD: Print an image of the weights\n \
+        hw2.py 3d // SGD: find the SGD accuracy for the test set\n"
+		return
+
 	#1a
-	#run_perceptron()
+	if sys.argv[1] == "1a":
+		run_perceptron()
 
 	#1b
-	#print_image("weights.png", train(train_data_norm, train_labels), 200)
+	if sys.argv[1] == "1b":
+		print_image("weights.png", train(train_data_norm, train_labels), 400)
 	
 	#1c
-	#print "The Accuracy of the Algorithm:" ,(accuracy(test_data_norm, test_labels, train(train_data_norm, train_labels))*100), "%"
+	if sys.argv[1] == "1c":
+		print "The Accuracy of the Algorithm:" ,(Perceptron_accuracy(test_data_norm, test_labels, train(train_data_norm, train_labels))*100), "%"
 	
 	#1d
-	#index, digit = find_misclassified()
-	#print_image("misclassified_%d.png" %digit[0], test_data_unscaled[index[0]], 1)
-	#print_image("misclassified_%d.png" %digit[1], test_data_unscaled[index[1]], 1)
+	if sys.argv[1] == "1d":
+		index, digit = find_misclassified()
+		print_image("misclassified_%d.png" %digit[0], test_data_unscaled[index[0]], 1)
+		print_image("misclassified_%d.png" %digit[1], test_data_unscaled[index[1]], 1)
 	
 	#2a
-	#best_C = SVM_find_best_C()
+	if sys.argv[1] == "2a":
+		best_C = SVM_find_best_C()
 
 	#2c
-	#best_C  = 1.00521990733
-	#SVM_weights(best_C)
+	if sys.argv[1] == "2c":
+		best_C  = 1.00521990733
+		SVM_weights(best_C)
 	
 	#2d
-	best_C  = 1.00521990733
-	clf = svm.LinearSVC(loss="hinge", fit_intercept=False, C=best_C)
-	clf.fit(train_data_norm, train_labels)
-	print "The accuracy of the linear SVM with C =", best_C, "is =", (clf.score(test_data_norm,test_labels)*100), "%"
+	if sys.argv[1] == "2d":
+		best_C  = 1.00521990733
+		clf = svm.LinearSVC(loss="hinge", fit_intercept=False, C=best_C)
+		clf.fit(train_data_norm, train_labels)
+		print "The accuracy of the linear SVM with C =", best_C, "is =", (clf.score(test_data_norm,test_labels)*100), "%"
+	
+	#3a
+	if sys.argv[1] == "3a":
+		best_eta = SGD()
+
+	#3b
+	if sys.argv[1] == "3b":
+		best_eta = 19.19
+		best_C = SGD_find_best_C(best_eta)
+
+	#3c
+	if sys.argv[1] == "3c":
+		best_C = 0.001
+		best_eta = 19.19
+		SGD_weights(best_C, best_eta)
+
+	#3d
+	if sys.argv[1] == "3d":
+		best_C = 0.001
+		best_eta = 19.19
+		accuracy = 0
+		w = SGD_weights(best_C, best_eta)
+		print "The accuracy of the my SGD with C =", best_C, "and eta =", best_eta, "is =", (SGD_accuracy(test_data, test_labels, w)*100), "%"
+	
+
+	return
+
+'''
+3c
+'''
+def SGD_weights(best_C, best_eta):
+	T = 20000
+	w = [0.0]*len(train_data[0])
+	for t in range(1,T+1):
+		i = random.choice(len(train_data))
+		if(numpy.dot(w,train_data[i])*train_labels[i] < 1):
+			w = numpy.multiply(1-(best_eta/t),w) + numpy.multiply((best_eta/t)*best_C*train_labels[i],train_data[i])
+	print_image("SGDWeights.png", w, 20000)
+
+	return w
+
+'''
+3b
+'''
+def SGD_find_best_C(eta):
+	T = 1000
+	RUNS = 10
+	accuracy = [0.0]*RUNS
+	c = 10e-10
+	eta0 = eta
+	cVec = []
+	accuracyVec = []
+	while c < 10e10:
+		for run in range(0,10): 
+			w = [0.0]*len(train_data[0])
+			for t in range(1,T+1):
+				i = random.choice(len(train_data))
+				if(numpy.dot(w,train_data[i])*train_labels[i] < 1):
+					w = numpy.multiply(1-(eta0/t),w) + numpy.multiply((eta0/t)*c*train_labels[i],train_data[i])
+			accuracy[run] = SGD_accuracy(validation_data, validation_labels, w)
+		cVec.append(c)
+		accuracyVec.append(float(sum(accuracy))/RUNS)
+		print c, float(sum(accuracy))/RUNS
+		if(c >= 10e-5 and c < 10e-3):
+			c *= 2
+		else:
+			c *= 10
+	res = zip(cVec, accuracyVec)
+	fig = plt.figure()
+	plt.plot(cVec, accuracyVec, c = "blue")
+	plt.xlabel('eta Values')
+	plt.xscale("log")
+	plt.ylabel('Accuracy')         
+	plt.title('SGD accuracy with different eta values') 
+	res.sort(key=operator.itemgetter(1))
+	plt.axvline(x=res[len(res)-1][0], c="red", label = "Best eta=%f" %res[len(res)-1][0])
+	#plt.axhline(y=res[len(res)-1][1], c="red", label = "Best C=%f" %res[len(res)-1][1])
+	plt.legend(loc="lower right")
+	plt.savefig('plot3b')
+	print "Best C:", res[len(res)-1][0], "Mean:", res[len(res)-1][1]
+	return res[len(res)-1][0]
+
+
+'''
+3a
+'''
+def SGD():
+	T = 1000
+	RUNS = 10
+	accuracy = [0.0]*RUNS
+	C = 1
+	eta0 = 10e-10
+	etaVec = []
+	accuracyVec = []
+	while eta0 < 100:
+		for run in range(0,10): 
+			w = [0.0]*len(train_data[0])
+			for t in range(1,T+1):
+				i = random.choice(len(train_data))
+				if(numpy.dot(w,train_data[i])*train_labels[i] < 1):
+					w = numpy.multiply(1-(eta0/t),w) + numpy.multiply((eta0/t)*C*train_labels[i],train_data[i])
+			accuracy[run] = SGD_accuracy(validation_data, validation_labels, w)
+		etaVec.append(eta0)
+		accuracyVec.append(float(sum(accuracy))/RUNS)
+		print eta0, float(sum(accuracy))/RUNS
+		if(eta0 < 1):
+			eta0 *= 10
+		else:
+			eta0 *= 1.1
+	res = zip(etaVec, accuracyVec)
+	fig = plt.figure()
+	plt.plot(etaVec, accuracyVec, c = "blue")
+	plt.xlabel('eta Values')
+	plt.xscale("log")
+	plt.ylabel('Accuracy')         
+	plt.title('SGD accuracy with different eta values') 
+	res.sort(key=operator.itemgetter(1))
+	plt.axvline(x=res[len(res)-1][0], c="red", label = "Best eta=%f" %res[len(res)-1][0])
+	#plt.axhline(y=res[len(res)-1][1], c="red", label = "Best C=%f" %res[len(res)-1][1])
+	plt.legend(loc="lower right")
+	plt.savefig('plot3a')
+	print "Best eta:", res[len(res)-1][0], "Mean:", res[len(res)-1][1]
+	return res[len(res)-1][0]
+
+def SGD_accuracy(data, labels, w):
+	accuracy = 0
+	for i in range(0,len(data)):
+		accuracy += 1 if(labels[i] == SGD_predict(data[i], w)) else 0
+	return float(accuracy)/len(data)
+
+def SGD_predict(data, w):
+	prediction = 0
+	for i in range(0,len(data)):
+		prediction += w[i]*data[i]
+	return 1 if prediction >= 0 else -1
 	return
 
 '''
@@ -79,7 +236,7 @@ def SVM_weights(C):
 	clf = svm.LinearSVC(loss="hinge", fit_intercept=False, C=C)
 	clf.fit(train_data_norm, train_labels)
 	weights = clf.coef_[0] 
-	print weights
+	#print weights
 	print_image("SVMWeights.png", weights, 200)
 	return
 
@@ -146,7 +303,7 @@ def run_perceptron_X_times(input_data, input_labels, times):
 		numpy.random.shuffle(temp)
 		data, labels = zip(*temp)
 		w = train(data, labels)
-		accuracyVector[i] = accuracy(test_data, test_labels, w)
+		accuracyVector[i] = Perceptron_accuracy(test_data, test_labels, w)
 		#print i
 	accuracyVector.sort()
 	return sum(accuracyVector)/times, accuracyVector[int(times*0.95)], accuracyVector[int(times*0.05)]
@@ -162,7 +319,7 @@ def run_perceptron():
 	print t
 	return
 
-def accuracy(data, labels, weights):
+def Perceptron_accuracy(data, labels, weights):
 	accuracy = 0
 	for i in range(0,len(data)):
 		accuracy += 1 if labels[i] == predict(data[i],weights) else 0

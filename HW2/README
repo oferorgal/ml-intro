@@ -1,0 +1,64 @@
+Ofer Orgal
+300459898
+oferorgal@mail.tau.ac.il
+
+The files are in my directory on nova.cs.tau.ac.il:
+/specific/a/home/cc/students/cs/oferorgal/ml/hw2/
+
+If for some reason the files are not accessible, I created a share in my google drive to my files:
+https://drive.google.com/drive/folders/0B6K9SrEqgeqRQUxSVkdSWHJRMkU?usp=sharing
+
+Folder content:
+Python files:
+	hw2.py - programing exercise 2
+
+Reports:
+	hw2.pdf - exercise report
+	README
+
+Plots and images:
+	misclassified_0.png 
+	misclassified_8.png
+	plot3a.png 
+	plot3b.png 
+	SGDWeights.png
+	SVMWeights.png 
+	weights.png   
+
+How to use the files:
+	Each section in the exercise is accessible by running the file name and the section number and letter (i.e. 1a , 1b , ... 3a, ...)  
+
+programing exercise 2:
+	hw2.py 1a: 
+		description: Perceptron: calc the accuracy with 5, 10, 50, 100, 500, 1000, 5000 sample sizes
+		output: A table with the mean accuracy and the 95,5 percentiles
+    hw2.py 1b: 
+    	description: Perceptron: Print an image of the weights
+    	output: weights.png
+    hw2.py 1c: 
+    	description: Perceptron: Train perceptron on the full training set and test the accuracy on the test set
+    	output: Prints the accuracy of the algorithim
+    hw2.py 1d: 
+    	description: Perceptron: Find and print 2 misclassified images
+    	output: 2 misclassified images
+    hw2.py 2a: 
+    	description: SVM: Train SVM and find the best C value
+    	output: Prints the best C for the algorithim tested with the CV set 
+    hw2.py 2c: 
+    	description: SVM: Print an image of the weights
+    	output: SVMWeights.png
+    hw2.py 2d: 
+    	description: SVM: find the SVM accuracy for the test set
+    	output: Print the accuracy of the algorithim
+    hw2.py 3a: 
+    	description: SGD: Train the SGD and find the best eta value for the CV
+    	output: Print the best eta for the algorithim for the CV
+    hw2.py 3b: 
+    	description: SGD: Train the SGD and find the best C value for the CV
+    	output: Print the best C value for the algorithim for the CV 
+    hw2.py 3c: 
+    	description: SGD: Print an image of the weights
+    	output: SGDWeights.png
+    hw2.py 3d: 
+    	description: SGD: find the SGD accuracy for the test set
+    	output: Print the accuracy of the algorithim
