@@ -12,7 +12,7 @@ import sys
 from numpy import *
 import numpy.random
 from sklearn.datasets import fetch_mldata
-from astropy.table import Table, Column
+#from astropy.table import Table, Column
 import sklearn.preprocessing
 from sklearn import svm
 
@@ -162,12 +162,12 @@ def SGD_find_best_C(eta):
 	res = zip(cVec, accuracyVec)
 	fig = plt.figure()
 	plt.plot(cVec, accuracyVec, c = "blue")
-	plt.xlabel('eta Values')
+	plt.xlabel('C Values')
 	plt.xscale("log")
 	plt.ylabel('Accuracy')         
-	plt.title('SGD accuracy with different eta values') 
+	plt.title('SGD accuracy with different C values') 
 	res.sort(key=operator.itemgetter(1))
-	plt.axvline(x=res[len(res)-1][0], c="red", label = "Best eta=%f" %res[len(res)-1][0])
+	plt.axvline(x=res[len(res)-1][0], c="red", label = "Best C=%f" %res[len(res)-1][0])
 	#plt.axhline(y=res[len(res)-1][1], c="red", label = "Best C=%f" %res[len(res)-1][1])
 	plt.legend(loc="lower right")
 	plt.savefig('plot3b')
@@ -309,14 +309,15 @@ def run_perceptron_X_times(input_data, input_labels, times):
 	return sum(accuracyVector)/times, accuracyVector[int(times*0.95)], accuracyVector[int(times*0.05)]
 
 def run_perceptron():
-	t = Table(names =("Sample Size", "Accuracy %", "percentile 95%", "percentile 5%"))
+	#t = Table(names =("Sample Size", "Accuracy %", "percentile 95%", "percentile 5%"))
+	print "Sample Size    ", "Accuracy %    ", "percentile 95%    ", "percentile 5%    "
 	sample_size = [5, 10, 50, 100, 500, 1000, 5000]
 	for i in sample_size:
 		mean, percentile_95, percentile_05 = run_perceptron_X_times(train_data_norm[0:i], train_labels[0:i], 100)
-		print i, mean, percentile_95, percentile_05
-		t.add_row([i, mean*100, percentile_95*100, percentile_05*100])
-	t["Sample Size"] = t["Sample Size"].astype(int)
-	print t
+		print i,"         ", mean,"   ", percentile_95,"   ", percentile_05
+		#t.add_row([i, mean*100, percentile_95*100, percentile_05*100])
+	#t["Sample Size"] = t["Sample Size"].astype(int)
+	#print t
 	return
 
 def Perceptron_accuracy(data, labels, weights):
