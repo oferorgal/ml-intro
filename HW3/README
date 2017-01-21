@@ -1,0 +1,54 @@
+Ofer Orgal
+300459898
+oferorgal@mail.tau.ac.il
+
+The files are in my directory on nova.cs.tau.ac.il:
+/specific/a/home/cc/students/cs/oferorgal/ml/hw3/
+
+If for some reason the files are not accessible, I created a share in my google drive to my files:
+https://drive.google.com/drive/folders/0B6K9SrEqgeqRTGdPTGlWUUpCeDg?usp=sharing
+
+Folder content:
+Python files:
+	hw3.py - programing exercise 3
+
+Reports:
+	hw2.pdf - exercise report
+	README
+
+Plots and images:
+	plot6aC.png
+    plot6aEta.png
+    plot6aC_with_kernel.png 
+    plot6aEta_with_kernel.png 
+    weights_digit_0.png
+    weights_digit_1.png
+    weights_digit_2.png
+    weights_digit_3.png
+    weights_digit_4.png
+    weights_digit_5.png
+    weights_digit_6.png
+    weights_digit_7.png
+    weights_digit_8.png
+    weights_digit_9.png  
+
+How to use the files:
+	Each section in the exercise is accessible by running the file name and the section number and letter (i.e. 6a , 6b , ... 7a, ...)  
+
+programing exercise 3:
+	hw3.py 6a: 
+		description: Find the best eta and C values for multiclass SVM
+		output: plot6aEta.png and plot6aC.png
+    hw3.py 6b: 
+    	description: Print the images of the weights
+    	output: 10 images weights_NUM_.png
+    hw3.py 6c: 
+    	description: Calc the accuracy of the SVM algorithm
+    	output: Prints the accuracy of the algorithim
+    hw3.py 7a: 
+    	description: Find the best eta and C values for multiclass SVM with Kernel
+    	output: plot6aEta_with_kernel.png and plot6aC_with_kernel.png
+    hw3.py 7b: 
+    	description: Calc the accuracy of the SVM with Kernel algorithm
+    	output: Prints the accuracy of the algorithim
+    
